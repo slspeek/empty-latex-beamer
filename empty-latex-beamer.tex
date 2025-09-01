@@ -1,0 +1,101 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{keystroke}
+
+\usepackage{hyperref}
+% colored links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+%------------------------------------------------------------
+%This block of code defines the information to appear in the
+%Title page
+\title[\LaTeX{} beamer sjabloon] %optional
+{Een lege \LaTeX{} beamer presentatie}
+
+% \subtitle{A short story}
+
+\author[S.L.Speek] % (optional)
+{Steven L. Speek}
+
+\institute[NLLGG] % (optional)
+{
+  Nederlandse Linux Gebruikers Groep 
+}
+
+\date[\today{}] % (optional)
+{\today{}}
+
+\logo{\includegraphics[height=1cm]{img/nllgg-logo.jpg}}
+
+%End of title page configuration block
+%------------------------------------------------------------
+
+
+
+%------------------------------------------------------------
+%The next block of commands puts the table of contents at the 
+%beginning of each section and highlights the current section:
+
+% \AtBeginSection[]
+% {
+%   \begin{frame}<handout:0>
+%     \frametitle{Inhoudsopgave}
+%     \tableofcontents[currentsection]
+%   \end{frame}
+% }
+\newif\iflattersubsect
+
+\AtBeginSection[] {
+    \begin{frame}<beamer>
+      \frametitle{Inhoudsopgave}
+      \tableofcontents[currentsection]
+     \end{frame}
+    \lattersubsectfalse
+}
+
+\AtBeginSubsection[] {
+    \iflattersubsect
+    \begin{frame}<beamer>
+      \frametitle{Inhoudsopgave}
+      \tableofcontents[currentsubsection]
+    \end{frame}
+    \fi
+    \lattersubsecttrue
+}
+%------------------------------------------------------------
+
+
+\begin{document}
+
+%The next statement creates the title page.
+\frame{\titlepage}
+
+
+%---------------------------------------------------------
+%This block of code is for the table of contents after
+%the title page
+\begin{frame}
+\frametitle{Inhoudsopgave}
+\tableofcontents
+\end{frame}
+%---------------------------------------------------------
+
+
+\section{Github instellingen}
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Actions instellingen}
+
+\end{frame}
+%---------------------------------------------------------
+
+\end{document}
