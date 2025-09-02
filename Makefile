@@ -8,6 +8,8 @@ HANDOUT=$(PDFLATEX) -jobname=$(HANDOUT_NAME) "\PassOptionsToClass{handout}{beame
 
 default: clean viewbeamer
 
+all: beamer handout
+
 beamer:
 		$(BEAMER); $(BEAMER)
 
