@@ -1,26 +1,35 @@
 MAINNAME=empty-latex-beamer
 HANDOUT_NAME=$(MAINNAME)-handout
 BEAMER_NAME=$(MAINNAME)-beamer
+HANDOUT_PDF=$(HANDOUT_NAME).pdf
+BEAMER_PDF=$(BEAMER_NAME).pdf
 LATEX_IMAGE=leplusorg/latex:sha-4a17317
-PDFLATEX=docker run --rm -t --workdir=/tmp --user="$(shell id -u):$(shell id -g)" --net=none  -v "$(shell pwd):/tmp"  $(LATEX_IMAGE) pdflatex --interaction batchmode
-BEAMER=$(PDFLATEX) -jobname=$(BEAMER_NAME) $(MAINNAME).tex
-HANDOUT=$(PDFLATEX) -jobname=$(HANDOUT_NAME) "\PassOptionsToClass{handout}{beamer}\input{$(MAINNAME)}"
+PDFLATEX_FLAGS=--interaction batchmode
+PDFLATEX=docker run --rm -t --workdir=/tmp --user="$(shell id -u):$(shell id -g)" --net=none  -v "$(shell pwd):/tmp"  $(LATEX_IMAGE) pdflatex $(PDFLATEX_FLAGS)
+BEAMER_CMD=$(PDFLATEX) -jobname=$(BEAMER_NAME) $(MAINNAME).tex
+HANDOUT_CMD=$(PDFLATEX) -jobname=$(HANDOUT_NAME) "\PassOptionsToClass{handout}{beamer}\input{$(MAINNAME)}"
 
-default: clean viewbeamer
+.PHONY: all clean viewbeamer viewhandout
 
-all: beamer handout
+default: viewbeamer
 
-beamer:
-		$(BEAMER); $(BEAMER)
+all: $(BEAMER_PDF) $(HANDOUT_PDF)
 
-handout:
-		$(HANDOUT); $(HANDOUT)
+$(BEAMER_PDF): $(MAINNAME).tex
+		$(BEAMER_CMD)
+		$(BEAMER_CMD)
 
-viewhandout: handout
-		open $(HANDOUT_NAME).pdf
+$(HANDOUT_PDF): $(MAINNAME).tex
+		$(HANDOUT_CMD)
+		$(HANDOUT_CMD)
+
+viewhandout: 
+		$(HANDOUT_CMD)
+		open $(HANDOUT_PDF)
 	
-viewbeamer: beamer
-		open $(BEAMER_NAME).pdf
+viewbeamer: 
+		$(BEAMER_CMD)
+		open $(BEAMER_PDF)
 
 clean:
 		rm {tex/,}*.aux *.aux *.nav *.snm *.lg *.4* *.image.* *.htoc *.html *.css *.dvi *.haux *.pdf *.log *.out *.idv *.tmp *.xref *.toc; exit 0
